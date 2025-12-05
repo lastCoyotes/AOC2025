@@ -16,7 +16,7 @@ for line in input:
         for j in range(i+1,len(line)):
             if int(line[j]) > r:
                 r = int(line[j])
-    print(l, r)
+    # print(l, r)
     result += (l*10 + r)
 
 print(result)
