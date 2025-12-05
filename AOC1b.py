@@ -1,4 +1,4 @@
-input = open('input/1a.txt', 'r')
+input = open('input/1.txt', 'r')
 
 result: int = 0
 position: int = 50
