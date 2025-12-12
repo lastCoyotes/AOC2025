@@ -5,39 +5,77 @@ import math
 import re
 
 # shapes - generated from input, placed here for visualization
+# a = [
+#     (0,0), (0,1), (0,2),
+#     (1,0), (1,1),
+#     (2,0)
+# ]
+
+# b = [
+#     (0,0), (0,1),
+#     (1,0), (1,1), (1,2),
+#     (2,0),        (2,2),
+# ]
+
+# c = [
+#                   (0,2),
+#            (1,1), (1,2),
+#     (2,0), (2,1),
+# ]
+
+# d = [
+#     (0,0), (0,1), (0,2),
+#     (1,0),
+#     (2,0), (2,1), (2,2),
+# ]
+
+# e = [
+#     (0,0),        (0,2),
+#     (1,0), (1,1), (1,2),
+#     (2,0),        (2,2),
+# ]
+
+# f = [
+#                   (0,2),
+#     (1,0), (1,1), (1,2),
+#     (2,0), (2,1), (2,2),
+# ]
+
+# EXAMPLE shapes not PUZZLE shapes
+
 a = [
     (0,0), (0,1), (0,2),
     (1,0), (1,1),
-    (2,0)
+    (2,0), (2,1)
 ]
 
 b = [
-    (0,0), (0,1),
-    (1,0), (1,1), (1,2),
-    (2,0),        (2,2),
+    (0,0), (0,1), (0,2),
+    (1,0), (1,1),
+           (2,1), (2,2)
 ]
 
 c = [
-                  (0,2),
-           (1,1), (1,2),
-    (2,0), (2,1),
+           (0,1), (0,2),
+    (1,0), (1,1), (1,2),
+    (1,0), (1,1)
 ]
 
 d = [
+    (0,0), (0,1),
+    (1,0), (1,1), (1,2),
+    (1,0), (1,1)
+]
+
+e = [
     (0,0), (0,1), (0,2),
     (1,0),
     (2,0), (2,1), (2,2),
 ]
 
-e = [
-    (0,0),        (0,2),
-    (1,0), (1,1), (1,2),
-    (2,0),        (2,2),
-]
-
 f = [
-                  (0,2),
-    (1,0), (1,1), (1,2),
+    (0,0), (0,1), (0,2),
+           (1,1),
     (2,0), (2,1), (2,2),
 ]
 
@@ -134,7 +172,7 @@ def solve(matrix, shapes):
     #tries to fit all shapes into the matrix using DFS
     # returns 1 if possible, else 0
     if not shapes:
-        return 0
+        return []
     
     current_shape = shapes[0]
 
@@ -148,15 +186,18 @@ def solve(matrix, shapes):
                     position = (row, col)
 
                     new_matrix = place_shape(matrix.copy(), shape, position)
-
+                    
                     # check if overlap
-                    if new_matrix:
+                    if new_matrix is not None:
+                        for line in new_matrix:
+                            print(line)
                         result = solve(new_matrix, shapes[1:])
 
-                        if result:
-                            return 1
+                        if result is not None:
+                            return [(shape, position, rotation, flip)] + result
     # no solution found
-    return 0
+    print("\n")
+    return None
 
 # next steps:
 # parse rest of puzzle input
@@ -168,7 +209,7 @@ def solve(matrix, shapes):
 
 # brute force DFS solution takes too long just to solve the first line
 # total = 0
-# with open('input/12trees.txt', 'r') as f:
+# with open('input/12example.txt', 'r') as f:
 #     for line in f.readlines():
 #         input = line.strip().split(" ")
 #         size = input[0].replace(":", "").split("x") # these are still strings
@@ -179,8 +220,9 @@ def solve(matrix, shapes):
 #             for _ in range(shape_count[x]):
 #                 shape_list.append(shapes_ref[x])
 #         matrix = create_empty_matrix(*size)
-#         total += solve(matrix, shape_list)
-#         print(total)
+#         if solve(matrix, shape_list) != None:
+#             total += 1
+        
 
 # print(total)
 
